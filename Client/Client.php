@@ -2,20 +2,22 @@
 
 namespace Mrself\Bigcommerce;
 
-use Mrself\BigcommerceHelper\Options\WithOptions;
 use Bigcommerce\Api\Client as Base;
 use Bigcommerce\Api\ClientError;
 use Bigcommerce\Api\NetworkError;
 use Bigcommerce\Api\ServerError;
+use Mrself\Options\Annotation\Option;
+use Mrself\Options\WithOptionsTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class Client
 {
-    use WithOptions;
+    use WithOptionsTrait;
 
     /**
      * How many times a client should retry request
      * after a failure before throwing an exception
+	 * @Option(parameter="bigcommerce.max_retries")
      * @var int
      */
     protected $maxRetries;
@@ -23,7 +25,6 @@ class Client
     public function getOptionsSchema()
     {
         return [
-            'required' => ['maxRetries'],
             'allowedTypes' => [
                 'maxRetries' => 'int'
             ]
