@@ -2,7 +2,7 @@
   "name": "mrself/bigcommerce",
   "autoload": {
     "psr-4": {
-      "Mrself\\Bigcommerce\\": "./"
+      "Mrself\\Bigcommerce\\": "./src"
     }
   },
   "autoload-dev": {
