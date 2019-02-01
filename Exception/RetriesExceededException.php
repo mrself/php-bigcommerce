@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Mrself\Bigcommerce;
+namespace Mrself\Bigcommerce\Exception;
 
-class MaxRetriesException extends BigcommereException
+class RetriesExceededException extends BigcommereException
 {
     /**
      * @var string

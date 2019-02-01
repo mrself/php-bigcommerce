@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Mrself\Bigcommerce;
+namespace Mrself\Bigcommerce\Client;
 
 use Bigcommerce\Api\Client as Base;
 use Bigcommerce\Api\ClientError;
 use Bigcommerce\Api\NetworkError;
 use Bigcommerce\Api\ServerError;
+use Mrself\Bigcommerce\Exception\ClientException;
+use Mrself\Bigcommerce\Exception\EmptyStoreHashException;
+use Mrself\Bigcommerce\Exception\RetriesExceededException;
+use Mrself\Bigcommerce\Exception\NotFoundException;
 use Mrself\Options\Annotation\Option;
 use Mrself\Options\WithOptionsTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +21,16 @@ class Client
     /**
      * How many times a client should retry request
      * after a failure before throwing an exception
-	 * @Option(parameter="bigcommerce.max_retries")
+	 * @Option()
      * @var int
      */
     protected $maxRetries;
+
+    /**
+     * @Option()
+     * @var string
+     */
+    protected $storeHash = '';
 
     public function getOptionsSchema()
     {
@@ -31,22 +41,22 @@ class Client
         ];
     }
 
-    /**
-     * @param string $method
-     * @param array $args
-     * @param int $retries
-     * @return array|bool|object
-     * @throws MaxRetriesException
-     * @throws ClientException
-     * @throws NotFoundException
-     * @throws NetworkError
-     */
-    public function exec(string $method, array $args, $retries = 0)
+	/**
+	 * @param string $method
+	 * @param array $args
+	 * @param int $retries
+	 * @return array|bool|object
+	 * @throws \Bigcommerce\Api\NetworkError
+	 * @throws \Mrself\Bigcommerce\Exception\ClientException
+	 * @throws \Mrself\Bigcommerce\Exception\RetriesExceededException
+	 * @throws \Mrself\Bigcommerce\Exception\NotFoundException
+	 */
+    public function exec(string $method, array $args = [], $retries = 0)
     {
         $methodArgs = func_get_args();
         $methodArgs[2] = @$methodArgs[2] ?: 0;
         if ($retries === $this->maxRetries) {
-            throw new MaxRetriesException($args[0], array_slice($args, 1));
+            throw new RetriesExceededException($method, $args);
         }
         try {
             if (method_exists(Base::class, $method)) {
@@ -67,13 +77,13 @@ class Client
         }
     }
 
-    /**
-     * @param ClientError $e
-     * @param array $args
-     * @return mixed
-     * @throws ClientException
-     * @throws NotFoundException
-     */
+	/**
+	 * @param ClientError $e
+	 * @param array $args
+	 * @return mixed
+	 * @throws \Mrself\Bigcommerce\Exception\ClientException
+	 * @throws \Mrself\Bigcommerce\Exception\NotFoundException
+	 */
     protected function handleClientError(ClientError $e, array $args)
     {
         if ($e->getCode() === Response::HTTP_TOO_MANY_REQUESTS) {
@@ -91,5 +101,22 @@ class Client
         } else {
             throw new ClientException($args, $e);
         }
+    }
+
+    public function __call(string $method, array $arguments)
+    {
+        return $this->exec($method, $arguments);
+    }
+
+    public function useV3(string $storeHash = null)
+    {
+        if (is_null($storeHash)) {
+            $storeHash = $this->storeHash;
+        }
+        if (!$storeHash) {
+            throw new EmptyStoreHashException();
+        }
+        \Bigcommerce\Api\Client::$api_path = 'https://api.bigcommerce.com/stores/'
+            . $storeHash . '/v3';
     }
 }
