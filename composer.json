@@ -16,6 +16,6 @@
     "bigcommerce/api": "^3.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8.0"
+    "phpunit/phpunit": "^7"
   }
 }
