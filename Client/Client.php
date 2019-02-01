@@ -1,10 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace Mrself\BigcommerceBigCommerce;
+namespace Mrself\Bigcommerce;
 
-use Mrself\Bigcommerce\ClientException;
-use Mrself\Bigcommerce\MaxRetriesException;
-use Mrself\Bigcommerce\NotFoundException;
 use Mrself\BigcommerceHelper\Options\WithOptions;
 use Bigcommerce\Api\Client as Base;
 use Bigcommerce\Api\ClientError;
