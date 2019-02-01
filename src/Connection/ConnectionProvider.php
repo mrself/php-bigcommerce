@@ -4,21 +4,24 @@ namespace Mrself\Bigcommerce\Connection;
 
 use Bigcommerce\Api\Client as Bigcommerce;
 use Bigcommerce\Api\Error;
+use Mrself\Options\Annotation\Option;
+use Mrself\Options\WithOptionsTrait;
 
 class ConnectionProvider
 {
+    use WithOptionsTrait;
+
+    /**
+     * @var mixed
+     */
     protected $connection;
 
     /**
-     * Kernel environment
+     * Environment
+     * @Option()
      * @var string
      */
-    protected $env;
-
-    public function __construct(string $env)
-    {
-        $this->env = $env;
-    }
+    protected $env = 'dev';
 
     public function setConnection($connection)
     {
@@ -34,8 +37,8 @@ class ConnectionProvider
         } catch (Error $error) {
             $result = false;
         }
-        // Reset connection configuration
-        $this->setup('', '', '');
+
+        $this->reset();
         return $result;
     }
 
@@ -53,5 +56,10 @@ class ConnectionProvider
         $connection->authenticateOauth($clientId, $apiToken);
         Bigcommerce::setConnection($connection);
         Bigcommerce::failOnError(true);
+    }
+
+    protected function reset()
+    {
+        $this->setup('', '', '');
     }
 }
