@@ -30,9 +30,7 @@ abstract class AbstractResourceTest extends TestCase
                 ]]
             ]
         ]);
-        $count = count($resource->getNamespace()->get());
-        $args = array_fill(0, $count, 1);
-        $entity = call_user_func_array([$resource, 'get'], $args);
+        $entity = call_user_func_array([$resource, 'get'], $this->getResourceArgs());
         $this->assertInstanceOf($resource->getBigcommerceResource(true), $entity);
         $this->assertEquals(1, $entity->id);
         $this->assertEquals('name', $entity->name);
@@ -46,10 +44,8 @@ abstract class AbstractResourceTest extends TestCase
                 [$this->makeUrl(), new ClientError('', 404)]
             ]
         ]);
-        $count = count($resource->getNamespace()->get());
-        $args = array_fill(0, $count, 1);
         try {
-            call_user_func_array([$resource, 'get'], $args);
+            call_user_func_array([$resource, 'get'], $this->getResourceArgs());
         } catch (NotFoundException $e) {
             $this->assertEquals($resource->getNamespace()->toDotted(), $e->getResourceName());
             return;
@@ -68,9 +64,7 @@ abstract class AbstractResourceTest extends TestCase
                 ]]
             ]
         ]);
-        $count = count($resource->getNamespace()->get());
-        $args = array_fill(0, $count, 1);
-        $entity = call_user_func_array([$resource, 'find'], $args);
+        $entity = call_user_func_array([$resource, 'find'], $this->getResourceArgs());
         $this->assertInstanceOf($resource->getBigcommerceResource(true), $entity);
         $this->assertEquals(1, $entity->id);
         $this->assertEquals('name', $entity->name);
