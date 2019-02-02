@@ -5,6 +5,7 @@ namespace Mrself\Bigcommerce\Resource;
 use Mrself\Bigcommerce\Exception\ClientException;
 use Mrself\Bigcommerce\Exception\RetriesExceededException;
 use Mrself\Bigcommerce\Exception\NotFoundException as ClientNotFoundException;
+use Mrself\NamespaceHelper\NamespaceHelper;
 
 interface ResourceInterface
 {
@@ -77,7 +78,7 @@ interface ResourceInterface
     public function makeUrl($params): string;
 
     /**
-     * @return array
+     * @return NamespaceHelper
      */
-    public function getName(): array;
+    public function getNamespace(): NamespaceHelper;
 }

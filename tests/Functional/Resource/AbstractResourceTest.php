@@ -28,7 +28,8 @@ abstract class AbstractResourceTest extends TestCase
                 ]]
             ]
         ]);
-        $args = array_fill(0, count($resource->getName()), 1);
+        $count = count($resource->getNamespace()->get());
+        $args = array_fill(0, $count, 1);
         $entity = call_user_func_array([$resource, 'get'], $args);
         $this->assertInstanceOf($resource->getBigcommerceResource(true), $entity);
         $this->assertEquals(1, $entity->id);
@@ -229,7 +230,7 @@ abstract class AbstractResourceTest extends TestCase
 
     protected function makeUrlParams(bool $isCollection = false)
     {
-        $name = $this->resource->getName();
+        $name = $this->resource->getNamespace()->get();
         if ($isCollection) {
             $name = array_slice($name, 0, -1);
         }

@@ -5,6 +5,7 @@ namespace Mrself\Bigcommerce\Resource;
 use Bigcommerce\Api\Filter;
 use ICanBoogie\Inflector;
 use Mrself\Bigcommerce\Client\Client;
+use Mrself\NamespaceHelper\NamespaceHelper;
 use Mrself\Options\Annotation\Option;
 use Mrself\Options\WithOptionsTrait;
 use Mrself\Bigcommerce\Exception\NotFoundException as ClientNotFoundException;
@@ -19,7 +20,7 @@ class AbstractResource implements ResourceInterface
      * Should be defined in a child class
      * @var string[]
      */
-    protected $name;
+    protected $namespaceSource;
 
     /**
      * BigCommerce resource class short name. A name must be a value from
@@ -45,6 +46,11 @@ class AbstractResource implements ResourceInterface
      * @var Inflector
      */
     protected $inflector;
+
+    /**
+     * @var NamespaceHelper
+     */
+    protected $namespace;
 
     /**
      * @inheritdoc
@@ -106,7 +112,7 @@ class AbstractResource implements ResourceInterface
         } else {
             $id = $params[0];
         }
-        throw new NotFoundException($this->name, $id);
+        throw new NotFoundException($this->getNamespace(), $id);
     }
 
     /**
@@ -140,9 +146,9 @@ class AbstractResource implements ResourceInterface
     {
         $result = '';
         if (array_key_exists('id', $urlParams)) {
-            $urlParams[$this->getLastName()] = ArrayUtil::pull($urlParams,'id');
+            $urlParams[$this->getName()] = ArrayUtil::pull($urlParams,'id');
         }
-        foreach ($this->name as $index => $i) {
+        foreach ($this->getNamespace()->get() as $index => $i) {
             $result .= '/' . $this->inflector->pluralize($i);
             if (array_key_exists($i, $urlParams)) {
                 $result .= '/' . $urlParams[$i];
@@ -159,7 +165,7 @@ class AbstractResource implements ResourceInterface
         if (is_array($params)) {
             return $this->makeUrlArray($params);
         }
-        $name = array_reverse($this->getName());
+        $name = array_reverse($this->getNamespace()->get());
         $params = array_combine($name, func_get_args());
         return $this->makeUrlArray($params);
     }
@@ -175,25 +181,25 @@ class AbstractResource implements ResourceInterface
     /**
      * @inheritdoc
      */
-    public function getName(): array
+    public function getNamespace(): NamespaceHelper
     {
-        return $this->name;
+        if ($this->namespace) {
+            return $this->namespace;
+        }
+        $this->namespace = NamespaceHelper::from($this->namespaceSource);
+        return $this->namespace;
+    }
+
+    public function getName(): string
+    {
+        return $this->getNamespace()->last();
     }
 
     protected function defineBigcommerceResource()
     {
         if (!$this->bigcommerceResource) {
-            $this->bigcommerceResource = ucfirst($this->getLastName());
+            $this->bigcommerceResource = ucfirst($this->getNamespace()->last());
         }
-    }
-
-    /**
-     * Returns the last element from $name property
-     * @return string
-     */
-    protected function getLastName(): string
-    {
-        return $this->name[count($this->name) - 1];
     }
 
     protected function onOptionsResolve()

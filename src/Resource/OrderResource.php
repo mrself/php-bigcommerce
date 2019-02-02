@@ -4,5 +4,5 @@ namespace Mrself\Bigcommerce\Resource;
 
 class OrderResource extends AbstractResource
 {
-    protected $name = ['order'];
+    protected $namespaceSource = ['order'];
 }

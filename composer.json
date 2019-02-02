@@ -18,7 +18,8 @@
     "bigcommerce/api": "^3.2",
     "icanboogie/inflector": "^1.4",
     "mrself/options": "2.0.1",
-    "mrself/util": "^1.3"
+    "mrself/util": "^1.3",
+    "mrself/namespace": "1.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",

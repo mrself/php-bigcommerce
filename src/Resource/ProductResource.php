@@ -4,5 +4,5 @@ namespace Mrself\Bigcommerce\Resource;
 
 class ProductResource extends AbstractResource
 {
-    protected $name = ['product'];
+    protected $namespaceSource = ['product'];
 }

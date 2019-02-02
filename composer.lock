@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3c82557cbbe5467c7d32548f8ad7292",
+    "content-hash": "49412fcdf14046dd97736f6931901e96",
     "packages": [
         {
             "name": "bigcommerce/api",
@@ -308,6 +308,32 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "time": "2019-02-02T09:16:35+00:00"
+        },
+        {
+            "name": "mrself/namespace",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrself/php-namespace.git",
+                "reference": "c14468c56c233cee6f0976beef12b720148c13e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrself/php-namespace/zipball/c14468c56c233cee6f0976beef12b720148c13e4",
+                "reference": "c14468c56c233cee6f0976beef12b720148c13e4",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mrself\\NamespaceHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2019-02-02T11:03:42+00:00"
         },
         {
             "name": "mrself/options",

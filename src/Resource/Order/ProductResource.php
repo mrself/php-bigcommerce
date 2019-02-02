@@ -6,5 +6,5 @@ use Mrself\Bigcommerce\Resource\AbstractResource;
 
 class ProductResource extends AbstractResource
 {
-    protected $name = ['order', 'product'];
+    protected $namespace = ['order', 'product'];
 }

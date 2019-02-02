@@ -3,6 +3,7 @@
 namespace Mrself\Bigcommerce\Resource;
 
 use Mrself\Bigcommerce\Exception\BigcommereException;
+use Mrself\NamespaceHelper\NamespaceHelper;
 
 class NotFoundException extends BigcommereException
 {
@@ -16,9 +17,9 @@ class NotFoundException extends BigcommereException
      */
     protected $id;
 
-    public function __construct(array $resourceName, int $id)
+    public function __construct(NamespaceHelper $resourceName, int $id)
     {
-        $this->resourceName = implode('.', $resourceName);
+        $this->resourceName = $resourceName->toDotted();
         $this->id = $id;
         parent::__construct('The resource "' . $this->resourceName . '" is not found by id: ' . $id);
     }
