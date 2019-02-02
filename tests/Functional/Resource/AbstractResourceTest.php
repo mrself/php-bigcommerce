@@ -19,6 +19,11 @@ abstract class AbstractResourceTest extends TestCase
      */
     protected $resource;
 
+    /**
+     * @var int
+     */
+    protected $counter;
+
     public function testGet()
     {
         $resource = $this->resource;
@@ -82,117 +87,96 @@ abstract class AbstractResourceTest extends TestCase
         $this->assertNull($entity);
     }
 
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFindAllCallsCallbackWithResultIfItIsProvided(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource, true) . '?limit=1&page=1', [
-//                    (object) [
-//                        'id' => 1,
-//                        'name' => 'name'
-//                    ]
-//                ]],
-//                [$this->makeUrl($resource, true) . '?limit=1&page=2', [
-//                    (object) [
-//                        'id' => 2,
-//                        'name' => 'name2'
-//                    ]
-//                ]],
-//                [$this->makeUrl($resource, true) . '?limit=1&page=3', null]
-//            ]
-//        ]);
-//        $this->counter = 0;
-//        $params = [
-//            'limit' => 1,
-//            'urlParams' => $this->makeUrlParams($resource, true)
-//        ];
-//        $resource->findAll(function ($result) {
-//            $this->counter++;
-//            $this->assertEquals(1, count($result));
-//        }, $params);
-//        $this->assertEquals(2, $this->counter);
-//    }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFindAllReturnsAllIfNoCallbackIsProvided(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $resource->setFindAllLimit(10);
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource, true) . '?limit=10&page=1', [
-//                    (object) [
-//                        'id' => 1,
-//                        'name' => 'name'
-//                    ],
-//                    (object) [
-//                        'id' => 2,
-//                        'name' => 'name2'
-//                    ]
-//                ]]
-//            ]
-//        ]);
-//        $params = [
-//            'urlParams' => $this->makeUrlParams($resource, true)
-//        ];
-//        $entities = $resource->findAll(null, $params);
-//        $this->assertEquals(2, count($entities));
-//        $this->assertEquals(1, $entities[0]->id);
-//        $this->assertEquals(2, $entities[1]->id);
-//    }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFindAllReturnsEmptyArrayIfBCReturnsNullAndWithoutCallback(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $resource->setFindAllLimit(10);
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource, true) . '?limit=10&page=1', null]
-//            ]
-//        ]);
-//        $params = [
-//            'urlParams' => $this->makeUrlParams($resource, true)
-//        ];
-//        $entities = $resource->findAll(null, $params);
-//        $this->assertEquals(0, count($entities));
-//    }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFindAllReturnsEmptyArrayIfBCReturnsNullAndWithCallback(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $resource->setFindAllLimit(10);
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource, true) . '?limit=10&page=1', null]
-//            ]
-//        ]);
-//        $params = [
-//            'urlParams' => $this->makeUrlParams($resource, true)
-//        ];
-//        $entities = $resource->findAll(function () {
-//        }, $params);
-//        $this->assertTrue($entities);
-//    }
+    public function testFindAllCallsCallbackWithResultIfItIsProvided()
+    {
+        $resource = $this->resource;
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(true) . '?limit=1&page=1', [
+                    (object) [
+                        'id' => 1,
+                        'name' => 'name'
+                    ]
+                ]],
+                [$this->makeUrl(true) . '?limit=1&page=2', [
+                    (object) [
+                        'id' => 2,
+                        'name' => 'name2'
+                    ]
+                ]],
+                [$this->makeUrl(true) . '?limit=1&page=3', null]
+            ]
+        ]);
+        $this->counter = 0;
+        $params = [
+            'limit' => 1,
+            'urlParams' => $this->makeUrlParams(true)
+        ];
+        $resource->all(function ($result) {
+            $this->counter++;
+            $this->assertEquals(1, count($result));
+        }, $params);
+        $this->assertEquals(2, $this->counter);
+    }
+
+    public function testFindAllReturnsAllIfNoCallbackIsProvided()
+    {
+        $resource = $this->resource;
+        $resource->setFindAllLimit(10);
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(true) . '?limit=10&page=1', [
+                    (object) [
+                        'id' => 1,
+                        'name' => 'name'
+                    ],
+                    (object) [
+                        'id' => 2,
+                        'name' => 'name2'
+                    ]
+                ]]
+            ]
+        ]);
+        $params = [
+            'urlParams' => $this->makeUrlParams(true)
+        ];
+        $entities = $resource->all(null, $params);
+        $this->assertEquals(2, count($entities));
+        $this->assertEquals(1, $entities[0]->id);
+        $this->assertEquals(2, $entities[1]->id);
+    }
+
+    public function testFindAllReturnsEmptyArrayIfBCReturnsNullAndWithoutCallback()
+    {
+        $resource = $this->resource;
+        $resource->setFindAllLimit(10);
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(true) . '?limit=10&page=1', null]
+            ]
+        ]);
+        $params = [
+            'urlParams' => $this->makeUrlParams(true)
+        ];
+        $entities = $resource->all(null, $params);
+        $this->assertEquals(0, count($entities));
+    }
+
+    public function testFindAllReturnsEmptyArrayIfBCReturnsNullAndWithCallback()
+    {
+        $resource = $this->resource;
+        $resource->setFindAllLimit(10);
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(true) . '?limit=10&page=1', null]
+            ]
+        ]);
+        $params = [
+            'urlParams' => $this->makeUrlParams(true)
+        ];
+        $entities = $resource->all(function () {}, $params);
+        $this->assertTrue($entities);
+    }
 
     protected function makeUrl(bool $isCollection = false): string
     {
@@ -228,6 +212,7 @@ abstract class AbstractResourceTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
+        $this->counter = 0;
         $this->traitSetup();
         $this->defineResource();
     }
