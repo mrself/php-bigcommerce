@@ -14,9 +14,4 @@ class ProductResource extends AbstractResource
     protected $skuResource;
 
     protected $namespaceSource = ['product'];
-
-    public function skus()
-    {
-//        return $this->skuResource->all($this->)
-    }
 }
