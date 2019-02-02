@@ -75,30 +75,19 @@ abstract class AbstractResourceTest extends TestCase
         $this->assertEquals(1, $entity->id);
         $this->assertEquals('name', $entity->name);
     }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFindReturnsNullIfNotFound(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource), new ClientError('', 404)]
-//            ]
-//        ]);
-//        $args = [];
-//        foreach (array_slice($resource->getName(), 0, -1) as $i) {
-//            $params[$i] = 1;
-//            $args[] = $params;
-//        }
-//        array_unshift($args, 1);
-//        $entity = call_user_func_array([$resource, 'find'], $args);
-//        $this->assertNull($entity);
-//    }
-//
+
+    public function testFindReturnsNullIfNotFound()
+    {
+        $resource = $this->resource;
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(), new ClientError('', 404)]
+            ]
+        ]);
+        $entity = call_user_func_array([$resource, 'find'], $this->getResourceArgs());
+        $this->assertNull($entity);
+    }
+
 //    /**
 //     * @param string $class Resource class
 //     * @dataProvider getResources
@@ -227,6 +216,19 @@ abstract class AbstractResourceTest extends TestCase
             $urlParams[$i] = 1;
         }
         return $urlParams;
+    }
+
+    /**
+     * Returns array of arguments for resource#getUrl.
+     * For example, for product resource it returns 1 (default resource id)
+     * to be mocked for bigcommerce
+     * @return array
+     */
+    protected function getResourceArgs()
+    {
+        $defaultResourceId = 1;
+        $count = count($this->resource->getNamespace()->get());
+        return array_fill(0, $count, $defaultResourceId);
     }
 
     protected function setUp()
