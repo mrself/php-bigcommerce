@@ -56,35 +56,25 @@ abstract class AbstractResourceTest extends TestCase
         }
         $this->assertTrue(false);
     }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @dataProvider getResources
-//     */
-//    public function testFind(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource), (object) [
-//                    'id' => 1,
-//                    'name' => 'name'
-//                ]]
-//            ]
-//        ]);
-//        $args = [];
-//        foreach (array_slice($resource->getName(), 0, -1) as $i) {
-//            $params[$i] = 1;
-//            $args[] = $params;
-//        }
-//        array_unshift($args, 1);
-//        $entity = call_user_func_array([$resource, 'find'], $args);
-//        $bcResourceClass = 'Bigcommerce\\Api\\Resources\\' . $resource->getBigCommerceResource();
-//        $this->assertInstanceOf($bcResourceClass, $entity);
-//        $this->assertEquals(1, $entity->id);
-//        $this->assertEquals('name', $entity->name);
-//    }
+
+    public function testFind()
+    {
+        $resource = $this->resource;
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(), (object) [
+                    'id' => 1,
+                    'name' => 'name'
+                ]]
+            ]
+        ]);
+        $count = count($resource->getNamespace()->get());
+        $args = array_fill(0, $count, 1);
+        $entity = call_user_func_array([$resource, 'find'], $args);
+        $this->assertInstanceOf($resource->getBigcommerceResource(true), $entity);
+        $this->assertEquals(1, $entity->id);
+        $this->assertEquals('name', $entity->name);
+    }
 //
 //    /**
 //     * @param string $class Resource class
