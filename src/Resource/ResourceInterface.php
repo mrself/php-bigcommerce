@@ -22,13 +22,12 @@ interface ResourceInterface
      * ```
      *
      * @param callable|null $cb
-     * @param array $query
-     * @see query() for detailed $query param
+     * @param array $params
+     * @param array $urlParams
      * @return array|bool True if callback is provided, otherwise result array
-     * @throws ClientException
-     * @throws RetriesExceededException
+     * @see query() for detailed $query param
      */
-    public function all(callable $cb = null, array $query = []);
+    public function batchAll(callable $cb, array $params = [], array $urlParams = []);
 
     /**
      * @see makeUrl()
@@ -50,7 +49,7 @@ interface ResourceInterface
     public function get($params);
 
     /**
-     * @param array $filter {
+     * @param array $params {
      *      @type int 'limit' Limit how much a page will contain resourced
      *      @type int 'page' Page number
      * }
@@ -59,7 +58,7 @@ interface ResourceInterface
      * @throws RetriesExceededException
      * @throws ClientNotFoundException
      */
-    public function query(array $filter = []);
+    public function query(array $params = [], array $urlParams = []);
 
     /**
      * ```

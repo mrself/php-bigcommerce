@@ -55,36 +55,49 @@ class AbstractResource implements ResourceInterface
     /**
      * @inheritdoc
      */
-    public function all(callable $cb = null, array $query = [])
+    public function batchAll(callable $cb, array $params = [], array $urlParams = [])
     {
-        $query['limit'] = @$query['limit'] ?: $this->findAllLimit;
-        $query['page'] = @$query['page'] ?: 1;
-        $all = [];
+        $params['limit'] = @$params['limit'] ?: $this->findAllLimit;
+        $params['page'] = @$params['page'] ?: 1;
         do {
             try {
-                $result = $this->query($query);
-                if ($cb) {
-                    if (!$result) {
-                        return true;
-                    }
-                    if ($cb($result) === false) {
-                        break;
-                    }
-                } else {
-                    if ($result) {
-                        $all = array_merge($all, $result);
-                    }
+                $result = $this->query($params, $urlParams);
+                if (!$result) {
+                    return true;
+                }
+                if ($cb($result) === false) {
+                    break;
                 }
             } catch (ClientNotFoundException $e) {
                 break;
             }
-            $query['page']++;
-        } while ($result && count($result) === $query['limit']);
-        if ($cb) {
-            return true;
+            $params['page']++;
+        } while ($result && count($result) === $params['limit']);
+        return true;
+    }
+
+    public function all($params = []): array
+    {
+        $args = func_get_args();
+        $argumentsCount = count($args);
+        if ($argumentsCount) {
+            $last = $args[count($args) - 1];
         } else {
-            return $all;
+            $last = null;
         }
+
+        if (is_array($last)) {
+            $params = $last;
+            $urlParams = array_slice($args, 0, -1);
+        } else {
+            $urlParams = $args;
+            $params = [];
+        }
+        $all = [];
+        $this->batchAll(function (array $result) use (&$all) {
+            $all = array_merge($all, $result);
+        }, $params, $urlParams);
+        return $all;
     }
 
     public function find($params)
@@ -118,11 +131,10 @@ class AbstractResource implements ResourceInterface
     /**
      * @inheritdoc
      */
-    public function query(array $filter = [])
+    public function query(array $params = [], array $urlParams = [])
     {
-        $filter['page'] = @$filter['page'] ?: 1;
-        $url = $this->makeUrl(ArrayUtil::pull($filter, 'urlParams', []));
-        $url .= Filter::create($filter)->toQuery();
+        $url = $this->makeCollectionUrl($urlParams, true);
+        $url .= Filter::create($params)->toQuery();
         return $this->client
             ->exec('getCollection', [$url, $this->bigcommerceResource]);
     }
@@ -142,13 +154,14 @@ class AbstractResource implements ResourceInterface
     /**
      * @inheritdoc
      */
-    public function makeUrlArray(array $urlParams = []): string
+    public function makeUrlArray(array $urlParams = [], bool $isCollection = false): string
     {
         $result = '';
         if (array_key_exists('id', $urlParams)) {
             $urlParams[$this->getName()] = ArrayUtil::pull($urlParams,'id');
         }
-        foreach ($this->getNamespace()->get() as $index => $i) {
+        $names = $this->getNamespace()->get();
+        foreach ($names as $index => $i) {
             $result .= '/' . $this->inflector->pluralize($i);
             if (array_key_exists($i, $urlParams)) {
                 $result .= '/' . $urlParams[$i];
@@ -163,11 +176,33 @@ class AbstractResource implements ResourceInterface
     public function makeUrl($params): string
     {
         if (is_array($params)) {
-            return $this->makeUrlArray($params);
+            if (ArrayUtil::isAssoc($params)) {
+                return $this->makeUrlArray($params);
+            }
+            return $this->makeUrlFromIds($params);
         }
-        $name = array_reverse($this->getNamespace()->get());
-        $params = array_combine($name, func_get_args());
-        return $this->makeUrlArray($params);
+        return $this->makeUrlFromIds(func_get_args());
+    }
+
+    public function makeCollectionUrl($params)
+    {
+        if (is_array($params)) {
+            if (ArrayUtil::isAssoc($params, true)) {
+                return $this->makeUrlArray($params, true);
+            }
+            return $this->makeUrlFromIds($params, true);
+        }
+        return $this->makeUrlFromIds(func_get_args());
+    }
+
+    public function makeUrlFromIds(array $urlParams = [], bool $isCollection = false)
+    {
+        $names = array_reverse($this->getNamespace()->get());
+        if ($isCollection) {
+            $names = array_slice($names, 1);
+        }
+        $params = array_combine($names, $urlParams);
+        return $this->makeUrlArray($params, $isCollection);
     }
 
     /**

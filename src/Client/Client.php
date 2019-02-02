@@ -32,6 +32,8 @@ class Client
      */
     protected $storeHash = '';
 
+    public const MAX_RESOURCES_LIMIT = 250;
+
     public function getOptionsSchema()
     {
         return [

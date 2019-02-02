@@ -44,7 +44,7 @@ class BaseResourceTest extends KernelTestCase
         $this->assertEquals('/products/1', $actual);
     }
 
-    public function testMakeUrlWithMultipleIds()
+    public function testMakeUrlWith2Ids()
     {
         $resource = SkuResource::make();
         $actual = $resource->makeUrl(2, 1);

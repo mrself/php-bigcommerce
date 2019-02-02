@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49412fcdf14046dd97736f6931901e96",
+    "content-hash": "933c8ec9a748250e1f0b915e5ddb24c5",
     "packages": [
         {
             "name": "bigcommerce/api",
@@ -337,22 +337,22 @@
         },
         {
             "name": "mrself/options",
-            "version": "v2.0.1",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-options.git",
-                "reference": "a5edcc7a79c52b78d895ea403ac0b144c55fa89a"
+                "reference": "8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-options/zipball/a5edcc7a79c52b78d895ea403ac0b144c55fa89a",
-                "reference": "a5edcc7a79c52b78d895ea403ac0b144c55fa89a",
+                "url": "https://api.github.com/repos/mrself/php-options/zipball/8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5",
+                "reference": "8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "^1.6",
                 "mrself/container": "1.2.0",
-                "mrself/util": "1.3.0",
+                "mrself/util": "1.5.0",
                 "php-di/phpdoc-reader": "^2.1",
                 "symfony/options-resolver": "^4.2"
             },
@@ -366,21 +366,25 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-02-02T09:20:32+00:00"
+            "time": "2019-02-02T16:50:03+00:00"
         },
         {
             "name": "mrself/util",
-            "version": "v1.3.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-util.git",
-                "reference": "451ee1b6f863726c085df4a098cde354fd98a436"
+                "reference": "6c41dd632c6de0e1239dbd37a61d5e306448f231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-util/zipball/451ee1b6f863726c085df4a098cde354fd98a436",
-                "reference": "451ee1b6f863726c085df4a098cde354fd98a436",
+                "url": "https://api.github.com/repos/mrself/php-util/zipball/6c41dd632c6de0e1239dbd37a61d5e306448f231",
+                "reference": "6c41dd632c6de0e1239dbd37a61d5e306448f231",
                 "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.5"
@@ -392,7 +396,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-02-01T18:06:07+00:00"
+            "time": "2019-02-02T16:47:24+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",

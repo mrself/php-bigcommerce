@@ -87,7 +87,7 @@ abstract class AbstractResourceTest extends TestCase
         $this->assertNull($entity);
     }
 
-    public function testFindAllCallsCallbackWithResultIfItIsProvided()
+    public function testBatchAllCallsCallbackWithResultIfItIsProvided()
     {
         $resource = $this->resource;
         $this->mockBc([
@@ -109,13 +109,12 @@ abstract class AbstractResourceTest extends TestCase
         ]);
         $this->counter = 0;
         $params = [
-            'limit' => 1,
-            'urlParams' => $this->makeUrlParams(true)
+            'limit' => 1
         ];
-        $resource->all(function ($result) {
+        $resource->batchAll(function ($result) {
             $this->counter++;
             $this->assertEquals(1, count($result));
-        }, $params);
+        }, $params, $this->makeUrlParams(true));
         $this->assertEquals(2, $this->counter);
     }
 
@@ -137,10 +136,8 @@ abstract class AbstractResourceTest extends TestCase
                 ]]
             ]
         ]);
-        $params = [
-            'urlParams' => $this->makeUrlParams(true)
-        ];
-        $entities = $resource->all(null, $params);
+        $args = array_slice($this->getResourceArgs(), 0, -1);
+        $entities = call_user_func_array([$resource, 'all'], $args);
         $this->assertEquals(2, count($entities));
         $this->assertEquals(1, $entities[0]->id);
         $this->assertEquals(2, $entities[1]->id);
@@ -155,31 +152,32 @@ abstract class AbstractResourceTest extends TestCase
                 [$this->makeUrl(true) . '?limit=10&page=1', null]
             ]
         ]);
-        $params = [
-            'urlParams' => $this->makeUrlParams(true)
-        ];
-        $entities = $resource->all(null, $params);
+        $args = array_slice($this->getResourceArgs(), 0, -1);
+        $entities = call_user_func_array([$resource, 'all'], $args);
         $this->assertEquals(0, count($entities));
     }
 
-    public function testFindAllReturnsEmptyArrayIfBCReturnsNullAndWithCallback()
+    public function testBatchAllReturnsTrueIfBCReturnsNull()
     {
         $resource = $this->resource;
         $resource->setFindAllLimit(10);
         $this->mockBc([
             'get' => [
-                [$this->makeUrl(true) . '?limit=10&page=1', null]
+                [$this->makeUrl(true) . '?limit=10&page=2', null]
             ]
         ]);
-        $params = [
-            'urlParams' => $this->makeUrlParams(true)
-        ];
-        $entities = $resource->all(function () {}, $params);
+        $urlParams = array_slice($this->getResourceArgs(), 0, -1);
+        $filter = ['limit' => 10, 'page' => 2];
+        $entities = $resource->batchAll(function () {}, $filter, $urlParams);
         $this->assertTrue($entities);
     }
 
     protected function makeUrl(bool $isCollection = false): string
     {
+        if ($isCollection) {
+            return $this->resource
+                ->makeCollectionUrl($this->makeUrlParams($isCollection));
+        }
         return $this->resource->makeUrl($this->makeUrlParams($isCollection));
     }
 
