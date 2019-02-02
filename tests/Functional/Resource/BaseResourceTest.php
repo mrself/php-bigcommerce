@@ -2,6 +2,7 @@
 
 namespace Mrself\Bigcommerce\Tests\Functional\Resource;
 
+use Mrself\Bigcommerce\Resource\InvalidUrlParamsException;
 use Mrself\Bigcommerce\Resource\Product\SkuResource;
 use Mrself\Bigcommerce\Resource\ProductResource;
 use Mrself\Bigcommerce\Tests\Functional\ConnectionTrait;
@@ -27,7 +28,7 @@ class BaseResourceTest extends KernelTestCase
         $this->assertEquals('/products/1', $actual);
     }
 
-    public function testMakeUrlWithArray()
+    public function testMakeUrlWithArrayForMultipleResources()
     {
         $resource = SkuResource::make();
         $actual = $resource->makeUrl([
@@ -51,6 +52,32 @@ class BaseResourceTest extends KernelTestCase
         $this->assertEquals('/products/1/skus/2', $actual);
     }
 
+    public function testMakeCollectionUrlArray()
+    {
+        $resource = SkuResource::make();
+        $actual = $resource->makeCollectionUrl(['product' => 1]);
+        $this->assertEquals('/products/1/skus', $actual);
+    }
+
+    public function testMakeCollectionUrlWithId()
+    {
+        $resource = SkuResource::make();
+        $actual = $resource->makeCollectionUrl(1);
+        $this->assertEquals('/products/1/skus', $actual);
+    }
+
+    public function testMakeCollectionUrlThrowsExceptionIfExtraUrlParamWasGiven()
+    {
+        $resource = ProductResource::make();
+        try {
+            $resource->makeCollectionUrl(1, 2);
+        } catch (InvalidUrlParamsException $e) {
+            $this->assertEquals([], $e->getResourceNamespace());
+            $this->assertEquals([1, 2], $e->getUrlParams());
+            return;
+        }
+        $this->assertTrue(false);
+    }
 
     protected function setUp()
     {

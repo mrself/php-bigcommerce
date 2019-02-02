@@ -192,7 +192,7 @@ class AbstractResource implements ResourceInterface
             }
             return $this->makeUrlFromIds($params, true);
         }
-        return $this->makeUrlFromIds(func_get_args());
+        return $this->makeUrlFromIds(func_get_args(), true);
     }
 
     public function makeUrlFromIds(array $urlParams = [], bool $isCollection = false)
@@ -200,6 +200,9 @@ class AbstractResource implements ResourceInterface
         $names = array_reverse($this->getNamespace()->get());
         if ($isCollection) {
             $names = array_slice($names, 1);
+        }
+        if (count($names) !== count($urlParams)) {
+            throw new InvalidUrlParamsException($names, $urlParams);
         }
         $params = array_combine($names, $urlParams);
         return $this->makeUrlArray($params, $isCollection);
