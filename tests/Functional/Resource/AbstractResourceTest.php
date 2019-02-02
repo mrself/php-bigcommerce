@@ -2,7 +2,9 @@
 
 namespace Mrself\Bigcommerce\Tests\Functional\Resource;
 
+use Bigcommerce\Api\ClientError;
 use Mrself\Bigcommerce\Resource\AbstractResource;
+use Mrself\Bigcommerce\Resource\NotFoundException;
 use Mrself\Bigcommerce\Tests\Functional\ConnectionTrait;
 use Mrself\Bigcommerce\Tests\Functional\TestCaseTrait;
 use PHPUnit\Framework\TestCase;
@@ -35,29 +37,25 @@ abstract class AbstractResourceTest extends TestCase
         $this->assertEquals(1, $entity->id);
         $this->assertEquals('name', $entity->name);
     }
-//
-//    /**
-//     * @param string $class Resource class
-//     * @expectedException \App\BigCommerce\Resource\NotFoundException
-//     * @dataProvider getResources
-//     */
-//    public function testGetThrowsNotFound(string $class)
-//    {
-//        $resource = static::$container->get($class);
-//        $resource->resolveOptions();
-//        $this->mockBc([
-//            'get' => [
-//                [$this->makeUrl($resource), new ClientError('', 404)]
-//            ]
-//        ]);
-//        $args = [];
-//        foreach (array_slice($resource->getName(), 0, -1) as $i) {
-//            $params[$i] = 1;
-//            $args[] = $params;
-//        }
-//        array_unshift($args, 1);
-//        call_user_func_array([$resource, 'get'], $args);
-//    }
+
+    public function testGetThrowsNotFound()
+    {
+        $resource = $this->resource;
+        $this->mockBc([
+            'get' => [
+                [$this->makeUrl(), new ClientError('', 404)]
+            ]
+        ]);
+        $count = count($resource->getNamespace()->get());
+        $args = array_fill(0, $count, 1);
+        try {
+            call_user_func_array([$resource, 'get'], $args);
+        } catch (NotFoundException $e) {
+            $this->assertEquals($resource->getNamespace()->toDotted(), $e->getResourceName());
+            return;
+        }
+        $this->assertTrue(false);
+    }
 //
 //    /**
 //     * @param string $class Resource class
