@@ -16,9 +16,6 @@ interface ResourceInterface
      *  echo $result[0]->id;
      * }, ['page' => 2]);
      *
-     * // Find all without a callback
-     * $result = $resource->findAll(null, ['page' => 2]);
-     * echo $result[0]->id;
      * ```
      *
      * @param callable|null $cb
