@@ -2,18 +2,17 @@
 
 namespace Mrself\Bigcommerce\Resource;
 
-use Mrself\Bigcommerce\Client;
-use Mrself\Bigcommerce\ClientException;
-use Mrself\Bigcommerce\MaxRetriesException;
-use Mrself\Bigcommerce\NotFoundException as ClientNotFoundException;
-use App\Util\ArrayUtil;
-use App\Util\Options\Optionable;
 use Bigcommerce\Api\Filter;
 use ICanBoogie\Inflector;
+use Mrself\Bigcommerce\Client\Client;
+use Mrself\Options\Annotation\Option;
+use Mrself\Options\WithOptionsTrait;
+use Mrself\Bigcommerce\Exception\NotFoundException as ClientNotFoundException;
+use Mrself\Util\ArrayUtil;
 
 class AbstractResource implements ResourceInterface
 {
-    use Optionable;
+    use WithOptionsTrait;
 
     /**
      * Resource name. An array of names. Some kind of namespace.
@@ -27,9 +26,10 @@ class AbstractResource implements ResourceInterface
      * \Bigcommerce\Api\Resources. Can not be defined
      * @var string
      */
-    protected $bigCommerceResource;
+    protected $bigcommerceResource;
 
     /**
+     * @Option()
      * @var Client
      */
     protected $client;
@@ -41,34 +41,15 @@ class AbstractResource implements ResourceInterface
     protected $findAllLimit = 50;
 
     /**
+     * @Option()
      * @var Inflector
      */
     protected $inflector;
 
-    public function __construct(Client $client)
-    {
-        $this->setOptions(['client' => $client]);
-        $this->inflector = Inflector::get();
-        $this->defineBigCommerceResource();
-    }
-
-
-    public function find($id, array $urlParams = [])
-    {
-        $urlParams[$this->getLastName()] = $id;
-        $url = $this->makeUrl($urlParams);
-        try {
-            return $this->client
-                ->exec('getResource', [$url, $this->bigCommerceResource]);
-        } catch (ClientNotFoundException $e) {
-            return null;
-        }
-    }
-
     /**
      * @inheritdoc
      */
-    public function findAll(callable $cb = null, array $query = [])
+    public function all(callable $cb = null, array $query = [])
     {
         $query['limit'] = @$query['limit'] ?: $this->findAllLimit;
         $query['page'] = @$query['page'] ?: 1;
@@ -100,14 +81,30 @@ class AbstractResource implements ResourceInterface
         }
     }
 
+    public function find($params)
+    {
+        $url = call_user_func_array([$this, 'makeUrl'], func_get_args());
+        try {
+            return $this->client
+                ->exec('getResource', [$url, $this->bigcommerceResource]);
+        } catch (ClientNotFoundException $e) {
+            return null;
+        }
+    }
+
     /**
      * @inheritdoc
      */
-    public function get($id, array $urlParams = [])
+    public function get($params)
     {
-        $result = $this->find($id, $urlParams);
+        $result = call_user_func_array([$this, 'find'], func_get_args());
         if ($result) {
             return $result;
+        }
+        if (is_int($params)) {
+            $id = $params;
+        } else {
+            $id = $params[0];
         }
         throw new NotFoundException($this->name, $id);
     }
@@ -121,30 +118,30 @@ class AbstractResource implements ResourceInterface
         $url = $this->makeUrl(ArrayUtil::pull($filter, 'urlParams', []));
         $url .= Filter::create($filter)->toQuery();
         return $this->client
-            ->exec('getCollection', [$url, $this->bigCommerceResource]);
-    }
-
-    public function getOptionsConfig(): array
-    {
-        return [
-            'required' => ['client']
-        ];
+            ->exec('getCollection', [$url, $this->bigcommerceResource]);
     }
 
     /**
+     * @param bool $fullNamespace
      * @return string
      */
-    public function getBigCommerceResource(): string
+    public function getBigcommerceResource(bool $fullNamespace = false): string
     {
-        return $this->bigCommerceResource;
+        if ($fullNamespace) {
+            return '\\Bigcommerce\\Api\\Resources\\' . $this->bigcommerceResource;
+        }
+        return $this->bigcommerceResource;
     }
 
     /**
      * @inheritdoc
      */
-    public function makeUrl(array $urlParams = []): string
+    public function makeUrlArray(array $urlParams = []): string
     {
         $result = '';
+        if (array_key_exists('id', $urlParams)) {
+            $urlParams[$this->getLastName()] = ArrayUtil::pull($urlParams,'id');
+        }
         foreach ($this->name as $index => $i) {
             $result .= '/' . $this->inflector->pluralize($i);
             if (array_key_exists($i, $urlParams)) {
@@ -152,6 +149,19 @@ class AbstractResource implements ResourceInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function makeUrl($params): string
+    {
+        if (is_array($params)) {
+            return $this->makeUrlArray($params);
+        }
+        $name = array_reverse($this->getName());
+        $params = array_combine($name, func_get_args());
+        return $this->makeUrlArray($params);
     }
 
     /**
@@ -163,20 +173,17 @@ class AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getName(): array
     {
         return $this->name;
     }
 
-    /**
-     * Defines $bigCommerceResource property
-     */
-    protected function defineBigCommerceResource()
+    protected function defineBigcommerceResource()
     {
-        if (!$this->bigCommerceResource) {
-            $this->bigCommerceResource = ucfirst($this->getLastName());
+        if (!$this->bigcommerceResource) {
+            $this->bigcommerceResource = ucfirst($this->getLastName());
         }
     }
 
@@ -187,5 +194,10 @@ class AbstractResource implements ResourceInterface
     protected function getLastName(): string
     {
         return $this->name[count($this->name) - 1];
+    }
+
+    protected function onOptionsResolve()
+    {
+        $this->defineBigcommerceResource();
     }
 }

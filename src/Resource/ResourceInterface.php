@@ -2,9 +2,9 @@
 
 namespace Mrself\Bigcommerce\Resource;
 
-use Mrself\Bigcommerce\ClientException;
-use Mrself\Bigcommerce\MaxRetriesException;
-use Mrself\Bigcommerce\NotFoundException as ClientNotFoundException;
+use Mrself\Bigcommerce\Exception\ClientException;
+use Mrself\Bigcommerce\Exception\RetriesExceededException;
+use Mrself\Bigcommerce\Exception\NotFoundException as ClientNotFoundException;
 
 interface ResourceInterface
 {
@@ -25,37 +25,28 @@ interface ResourceInterface
      * @see query() for detailed $query param
      * @return array|bool True if callback is provided, otherwise result array
      * @throws ClientException
-     * @throws MaxRetriesException
+     * @throws RetriesExceededException
      */
-    public function findAll(callable $cb = null, array $query = []);
+    public function all(callable $cb = null, array $query = []);
 
     /**
-     * ```php
-     * // GET request for /products/1
-     * $productResource->find(1);
-     *
-     * // GET request for /products/11/skus/1
-     * $skuResource->find(1, ['product' => 11]);
-     * ```
-     *
-     * @param int $id Resource id
-     * @param array $urlParams Params for url. That can be id of resources.
+     * @see makeUrl()
+     * @param array $params Params for url.
      * @return mixed Resource
      * @throws ClientException
-     * @throws MaxRetriesException
+     * @throws RetriesExceededException
      */
-    public function find($id, array $urlParams = []);
+    public function find($params);
 
     /**
      * @see find()
-     * @param int $id
-     * @param array $urlParams Params for url
+     * @param array $params Params for url
      * @return mixed
      * @throws NotFoundException
      * @throws ClientException
-     * @throws MaxRetriesException
+     * @throws RetriesExceededException
      */
-    public function get($id, array $urlParams = []);
+    public function get($params);
 
     /**
      * @param array $filter {
@@ -64,7 +55,7 @@ interface ResourceInterface
      * }
      * @return array|bool|object
      * @throws ClientException
-     * @throws MaxRetriesException
+     * @throws RetriesExceededException
      * @throws ClientNotFoundException
      */
     public function query(array $filter = []);
@@ -72,14 +63,18 @@ interface ResourceInterface
     /**
      * ```
      * // Suppose $name prop is ['product', 'sku']
-     * $inst->makeUrl(['product' => 1, 'sku' => 2]); // Outputs '/products/1/skus/2'
+     * // Outputting '/products/1/skus/2':
+     * $inst->makeUrl(['product' => 1, 'sku' => 2]);
+     * // or
+     * $inst->makeUrl(2, 1); // 2 - sku is, 1 - product id
      * ```
      *
      * Makes an url for an api call
-     * @param array $urlParams Associative array where keys are values from $name prop
+     * @param array $params Associative array where keys are values from $name prop.
+     *  Can be id followed by ids of parent resources
      * @return string
      */
-    public function makeUrl(array $urlParams = []): string;
+    public function makeUrl($params): string;
 
     /**
      * @return array

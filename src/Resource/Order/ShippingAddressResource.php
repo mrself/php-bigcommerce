@@ -8,5 +8,5 @@ class ShippingAddressResource extends AbstractResource
 {
     protected $name = ['order', 'shipping_address'];
 
-    protected $bigCommerceResource = 'Address';
+    protected $bigcommerceResource = 'Address';
 }

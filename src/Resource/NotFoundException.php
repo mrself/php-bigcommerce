@@ -2,9 +2,9 @@
 
 namespace Mrself\Bigcommerce\Resource;
 
-use App\Exception\AbstractException;
+use Mrself\Bigcommerce\Exception\BigcommereException;
 
-class NotFoundException extends AbstractException
+class NotFoundException extends BigcommereException
 {
     /**
      * @var array
