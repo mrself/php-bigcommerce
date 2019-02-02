@@ -563,6 +563,7 @@ class Connection extends \Bigcommerce\Api\Connection
     public function getHeader($header)
     {
         if (array_key_exists($header, $this->responseHeaders)) {
+            /** @noinspection PhpInconsistentReturnPointsInspection */
             return $this->responseHeaders[$header];
         }
     }

@@ -3,6 +3,7 @@
 namespace Mrself\Bigcommerce\Client;
 
 use Bigcommerce\Api\Client as Base;
+use Bigcommerce\Api\Client as BigcommerceClient;
 use Bigcommerce\Api\ClientError;
 use Bigcommerce\Api\NetworkError;
 use Bigcommerce\Api\ServerError;
@@ -105,11 +106,24 @@ class Client
         }
     }
 
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return array|bool|object
+     * @throws ClientException
+     * @throws NetworkError
+     * @throws NotFoundException
+     * @throws RetriesExceededException
+     */
     public function __call(string $method, array $arguments)
     {
         return $this->exec($method, $arguments);
     }
 
+    /**
+     * @param string|null $storeHash
+     * @throws EmptyStoreHashException
+     */
     public function useV3(string $storeHash = null)
     {
         if (is_null($storeHash)) {
@@ -118,7 +132,7 @@ class Client
         if (!$storeHash) {
             throw new EmptyStoreHashException();
         }
-        \Bigcommerce\Api\Client::$api_path = 'https://api.bigcommerce.com/stores/'
+        BigcommerceClient::$api_path = 'https://api.bigcommerce.com/stores/'
             . $storeHash . '/v3';
     }
 }
