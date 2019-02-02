@@ -70,7 +70,7 @@ interface ResourceInterface
      * ```
      *
      * Makes an url for an api call
-     * @param array $params Associative array where keys are values from $name prop.
+     * @param mixed $params Associative array where keys are values from $name prop.
      *  Can be id followed by ids of parent resources
      * @return string
      */
