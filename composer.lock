@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "933c8ec9a748250e1f0b915e5ddb24c5",
+    "content-hash": "479e6b5d411f9106cf15c78f36bda7ed",
     "packages": [
         {
             "name": "bigcommerce/api",
@@ -337,16 +337,16 @@
         },
         {
             "name": "mrself/options",
-            "version": "v2.0.3",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-options.git",
-                "reference": "8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5"
+                "reference": "42bb6699f4300d08820400ef084bc9776b52b57e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-options/zipball/8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5",
-                "reference": "8fcd6a0f8970205f4c2f5d2a9d7494f35f7f22e5",
+                "url": "https://api.github.com/repos/mrself/php-options/zipball/42bb6699f4300d08820400ef084bc9776b52b57e",
+                "reference": "42bb6699f4300d08820400ef084bc9776b52b57e",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +366,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-02-02T16:50:03+00:00"
+            "time": "2019-02-02T18:44:41+00:00"
         },
         {
             "name": "mrself/util",
