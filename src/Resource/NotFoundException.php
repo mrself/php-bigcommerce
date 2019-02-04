@@ -20,7 +20,7 @@ class NotFoundException extends BigcommereException
     public function __construct(NamespaceHelper $resourceName, $id)
     {
         $this->resourceName = $resourceName->toDotted();
-        $this->id = $id;
+        $this->id = (int) $id;
         parent::__construct('The resource "' . $this->resourceName . '" is not found by id: ' . $id);
     }
 

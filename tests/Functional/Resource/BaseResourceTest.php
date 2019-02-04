@@ -2,7 +2,9 @@
 
 namespace Mrself\Bigcommerce\Tests\Functional\Resource;
 
+use Bigcommerce\Api\ClientError;
 use Mrself\Bigcommerce\Resource\InvalidUrlParamsException;
+use Mrself\Bigcommerce\Resource\NotFoundException;
 use Mrself\Bigcommerce\Resource\Product\SkuResource;
 use Mrself\Bigcommerce\Resource\ProductResource;
 use Mrself\Bigcommerce\Tests\Functional\ConnectionTrait;
@@ -74,6 +76,42 @@ class BaseResourceTest extends KernelTestCase
         } catch (InvalidUrlParamsException $e) {
             $this->assertEquals([], $e->getResourceNamespace());
             $this->assertEquals([1, 2], $e->getUrlParams());
+            return;
+        }
+        $this->assertTrue(false);
+    }
+
+    public function testGetThrowsNotFoundWithResourceIdAsInt()
+    {
+        $resource = ProductResource::make();
+        $this->mockBc([
+            'get' => [
+                ['/products/100', new ClientError('', 404)]
+            ]
+        ]);
+        try {
+            $resource->get('100');
+        } catch (NotFoundException $e) {
+            $this->assertEquals($resource->getNamespace()->toDotted(), $e->getResourceName());
+            $this->assertEquals(100, $e->getId());
+            return;
+        }
+        $this->assertTrue(false);
+    }
+
+    public function testGetThrowsNotFoundWithProperResourceId()
+    {
+        $resource = SkuResource::make();
+        $this->mockBc([
+            'get' => [
+                ['/products/1/skus/2', new ClientError('', 404)]
+            ]
+        ]);
+        try {
+            $resource->get(2, 1);
+        } catch (NotFoundException $e) {
+            $this->assertEquals($resource->getNamespace()->toDotted(), $e->getResourceName());
+            $this->assertEquals(2, $e->getId());
             return;
         }
         $this->assertTrue(false);

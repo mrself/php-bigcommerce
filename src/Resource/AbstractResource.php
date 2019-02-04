@@ -120,7 +120,7 @@ class AbstractResource implements ResourceInterface
         if ($result) {
             return $result;
         }
-        if (is_int($params)) {
+        if (is_numeric($params)) {
             $id = $params;
         } else {
             $id = $params[0];
