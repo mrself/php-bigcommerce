@@ -28,7 +28,7 @@ interface ResourceInterface
 
     /**
      * @see makeUrl()
-     * @param array $params Params for url.
+     * @param mixed $params Params for url.
      * @return mixed Resource
      * @throws ClientException
      * @throws RetriesExceededException
@@ -37,7 +37,7 @@ interface ResourceInterface
 
     /**
      * @see find()
-     * @param array $params Params for url
+     * @param mixed $params Params for url
      * @return mixed
      * @throws NotFoundException
      * @throws ClientException
