@@ -40,10 +40,6 @@ class ClientTest extends TestCase
 
     /**
      * @dataProvider getClientErrors
-     * @throws \Bigcommerce\Api\NetworkError
-     * @throws \Mrself\Bigcommerce\Exception\ClientException
-     * @throws \Mrself\Bigcommerce\Exception\RetriesExceededException
-     * @throws \Mrself\Bigcommerce\Exception\NotFoundException
      */
     public function testItRetriesOnErrors($error)
     {
