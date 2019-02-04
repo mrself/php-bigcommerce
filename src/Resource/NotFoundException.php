@@ -17,7 +17,7 @@ class NotFoundException extends BigcommereException
      */
     protected $id;
 
-    public function __construct(NamespaceHelper $resourceName, int $id)
+    public function __construct(NamespaceHelper $resourceName, $id)
     {
         $this->resourceName = $resourceName->toDotted();
         $this->id = $id;
