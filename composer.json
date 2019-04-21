@@ -18,7 +18,7 @@
     "bigcommerce/api": "^3.2",
     "icanboogie/inflector": "^1.4",
     "mrself/namespace": "^1.1.0",
-    "mrself/options": "^2.3.1",
+    "mrself/options": "^2.4.0",
     "psr/log": "^1.1",
     "monolog/monolog": "^1.24"
   },
