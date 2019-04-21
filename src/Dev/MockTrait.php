@@ -27,7 +27,7 @@ trait MockTrait
         if (!$this->bcConnection) {
             Client::failOnError(true);
             $this->bcConnection = $this->getMockBuilder(Connection::class)
-                ->setMethods(['get', 'post'])
+                ->setMethods(['get', 'post', 'put'])
                 ->getMock();
             Client::setConnection($this->bcConnection);
         }
@@ -68,6 +68,14 @@ trait MockTrait
         $index = @$request[2] ? $request[2] : $this->bcMockIndex++;
         $this->bcConnection->expects($this->at($index))
             ->method('post')
+            ->with($this->stringContains($request[0]), $this->equalTo($request[1]));
+    }
+
+    protected function mockBcPut($request)
+    {
+        $index = @$request[2] ? $request[2] : $this->bcMockIndex++;
+        $this->bcConnection->expects($this->at($index))
+            ->method('put')
             ->with($this->stringContains($request[0]), $this->equalTo($request[1]));
     }
 
