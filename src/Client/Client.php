@@ -126,6 +126,25 @@ class Client
      */
     public function useV3(string $storeHash = null)
     {
+        $this->useVersion(3, $storeHash);
+    }
+
+    /**
+     * @param string|null $storeHash
+     * @throws EmptyStoreHashException
+     */
+    public function useV2(string $storeHash = null)
+    {
+        $this->useVersion(2, $storeHash);
+    }
+
+    /**
+     * @param string|int $version
+     * @param string|null $storeHash
+     * @throws EmptyStoreHashException
+     */
+    protected function useVersion($version, string $storeHash = null)
+    {
         if (is_null($storeHash)) {
             $storeHash = $this->storeHash;
         }
@@ -133,6 +152,6 @@ class Client
             throw new EmptyStoreHashException();
         }
         BigcommerceClient::$api_path = 'https://api.bigcommerce.com/stores/'
-            . $storeHash . '/v3';
+            . $storeHash . '/v' . $version;
     }
 }

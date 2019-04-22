@@ -11,6 +11,7 @@ use Mrself\Bigcommerce\Exception\NotFoundException;
 use Mrself\Bigcommerce\Exception\RetriesExceededException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Bigcommerce\Api\Client as BigcommerceClient;
 
 class ClientTest extends TestCase
 {
@@ -157,6 +158,32 @@ class ClientTest extends TestCase
     {
         $this->client->useV3();
         $this->assertTrue(true);
+    }
+
+    public function testUseV3WithHashOption()
+    {
+        $this->makeClient(['maxRetries' => 2, 'storeHash' => 'hash']);
+        $this->client->useV3();
+        $this->assertEquals('https://api.bigcommerce.com/stores/hash/v3', BigcommerceClient::$api_path);
+    }
+
+    public function testUseV3WithHashParam()
+    {
+        $this->client->useV3('hash');
+        $this->assertEquals('https://api.bigcommerce.com/stores/hash/v3', BigcommerceClient::$api_path);
+    }
+
+    public function testUseV2WithHashOption()
+    {
+        $this->makeClient(['maxRetries' => 2, 'storeHash' => 'hash']);
+        $this->client->useV2();
+        $this->assertEquals('https://api.bigcommerce.com/stores/hash/v2', BigcommerceClient::$api_path);
+    }
+
+    public function testUseV2WithHashParam()
+    {
+        $this->client->useV2('hash');
+        $this->assertEquals('https://api.bigcommerce.com/stores/hash/v2', BigcommerceClient::$api_path);
     }
 
     public function setUp()
