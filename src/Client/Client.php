@@ -154,4 +154,9 @@ class Client
         BigcommerceClient::$api_path = 'https://api.bigcommerce.com/stores/'
             . $storeHash . '/v' . $version;
     }
+
+    public function setStoreHash(string $hash): void
+    {
+        $this->storeHash = $hash;
+    }
 }
