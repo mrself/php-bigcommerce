@@ -7,4 +7,6 @@ use Mrself\Bigcommerce\Resource\AbstractResource;
 class ImageResource extends AbstractResource
 {
     protected $namespaceSource = ['product', 'image'];
+
+    protected $bigcommerceResource = 'ProductImage';
 }
