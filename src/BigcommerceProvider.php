@@ -10,7 +10,7 @@ class BigcommerceProvider
 {
     public function boot()
     {
-        $container = new BigcommerceContainer();
+        $container = BigcommerceContainer::make();
         ContainerRegistry::add('Mrself\\Bigcommerce', $container);
         $client = Client::make(['maxRetries' => 2]);
         $container->set(Client::class, $client);

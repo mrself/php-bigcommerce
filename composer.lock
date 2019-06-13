@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "955e52d7d42b05e854e9242b0c3e6beb",
+    "content-hash": "95157d8a133b8298d6c6d3c2c9dfceb9",
     "packages": [
         {
             "name": "bigcommerce/api",
@@ -61,16 +61,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5"
+                "reference": "53120e0eb10355388d6ccbe462f1fea34ddadb24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5",
-                "reference": "c7f2050c68a9ab0bdb0f98567ec08d80ea7d24d5",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/53120e0eb10355388d6ccbe462f1fea34ddadb24",
+                "reference": "53120e0eb10355388d6ccbe462f1fea34ddadb24",
                 "shasum": ""
             },
             "require": {
@@ -125,24 +125,27 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-12-06T07:11:42+00:00"
+            "time": "2019-03-25T19:12:02+00:00"
         },
         {
             "name": "doctrine/lexer",
-            "version": "v1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/1febd6c3ef84253d7c815bed85fc622ad207a9f8",
+                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5"
             },
             "type": "library",
             "extra": {
@@ -151,8 +154,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Lexer\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Lexer\\": "lib/Doctrine/Common/Lexer"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -173,13 +176,16 @@
                     "email": "schmittjoh@gmail.com"
                 }
             ],
-            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "https://www.doctrine-project.org/projects/lexer.html",
             "keywords": [
+                "annotations",
+                "docblock",
                 "lexer",
-                "parser"
+                "parser",
+                "php"
             ],
-            "time": "2014-09-09T13:34:57+00:00"
+            "time": "2019-06-08T11:03:04+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -359,19 +365,20 @@
         },
         {
             "name": "mrself/container",
-            "version": "v1.3.0",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-container.git",
-                "reference": "b6777b253dcfea288a0483d86fed0e11f1d3e0cc"
+                "reference": "20a1a6d56a126188a32ad083d516b84e4f2c78a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-container/zipball/b6777b253dcfea288a0483d86fed0e11f1d3e0cc",
-                "reference": "b6777b253dcfea288a0483d86fed0e11f1d3e0cc",
+                "url": "https://api.github.com/repos/mrself/php-container/zipball/20a1a6d56a126188a32ad083d516b84e4f2c78a5",
+                "reference": "20a1a6d56a126188a32ad083d516b84e4f2c78a5",
                 "shasum": ""
             },
             "require": {
+                "mrself/options": "^2.8",
                 "php": "^7.2"
             },
             "require-dev": {
@@ -385,7 +392,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-02-03T15:07:19+00:00"
+            "time": "2019-06-13T16:55:54+00:00"
         },
         {
             "name": "mrself/namespace",
@@ -415,21 +422,21 @@
         },
         {
             "name": "mrself/options",
-            "version": "v2.5.0",
+            "version": "v2.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-options.git",
-                "reference": "a34cd1467aefa27a97d7270296c82a28b19c57bc"
+                "reference": "4cebf4035585ed3036e690befdb87d192c2de4cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-options/zipball/a34cd1467aefa27a97d7270296c82a28b19c57bc",
-                "reference": "a34cd1467aefa27a97d7270296c82a28b19c57bc",
+                "url": "https://api.github.com/repos/mrself/php-options/zipball/4cebf4035585ed3036e690befdb87d192c2de4cb",
+                "reference": "4cebf4035585ed3036e690befdb87d192c2de4cb",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "^1.6",
-                "mrself/container": "1.3.0",
+                "mrself/container": "^1.4.1",
                 "mrself/util": "^1.5.0",
                 "php-di/phpdoc-reader": "^2.1",
                 "symfony/options-resolver": "^4.2"
@@ -445,20 +452,20 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-05-01T08:49:46+00:00"
+            "time": "2019-06-13T16:41:27+00:00"
         },
         {
             "name": "mrself/util",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrself/php-util.git",
-                "reference": "6c41dd632c6de0e1239dbd37a61d5e306448f231"
+                "reference": "493d1ee3308196d4fefc487f22a702064d1f32cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrself/php-util/zipball/6c41dd632c6de0e1239dbd37a61d5e306448f231",
-                "reference": "6c41dd632c6de0e1239dbd37a61d5e306448f231",
+                "url": "https://api.github.com/repos/mrself/php-util/zipball/493d1ee3308196d4fefc487f22a702064d1f32cf",
+                "reference": "493d1ee3308196d4fefc487f22a702064d1f32cf",
                 "shasum": ""
             },
             "require": {
@@ -466,7 +473,8 @@
                 "php": "^7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.5"
+                "phpunit/phpunit": "^7.5",
+                "symfony/var-dumper": "^4.2"
             },
             "type": "library",
             "autoload": {
@@ -475,7 +483,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2019-02-02T16:47:24+00:00"
+            "time": "2019-02-03T06:18:01+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",
@@ -1468,16 +1476,16 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.2.3",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "831b272963a8aa5a0613a1a7f013322d8161bbbb"
+                "reference": "914e0edcb7cd0c9f494bc023b1d47534f4542332"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/831b272963a8aa5a0613a1a7f013322d8161bbbb",
-                "reference": "831b272963a8aa5a0613a1a7f013322d8161bbbb",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/914e0edcb7cd0c9f494bc023b1d47534f4542332",
+                "reference": "914e0edcb7cd0c9f494bc023b1d47534f4542332",
                 "shasum": ""
             },
             "require": {
@@ -1486,7 +1494,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -1518,7 +1526,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2019-01-16T21:31:25+00:00"
+            "time": "2019-05-10T05:38:46+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
