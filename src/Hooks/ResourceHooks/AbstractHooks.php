@@ -33,6 +33,13 @@ abstract class AbstractHooks
         $this->create($destUrl, '*');
     }
 
+    public function createBaseHooks(string $destUrl)
+    {
+        $this->createCreatedHook($destUrl);
+        $this->createUpdatedHook($destUrl);
+        $this->createDeletedHook($destUrl);
+    }
+
     public function createCreatedHook(string $destUrl)
     {
         $this->create($destUrl, 'created');
