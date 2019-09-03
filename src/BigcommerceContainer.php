@@ -11,4 +11,13 @@ class BigcommerceContainer extends \Mrself\Container\Container
         }
         return parent::get($key, $default);
     }
+
+    public function has(string $name): bool
+    {
+        if (strpos($name, 'Mrself\\Bigcommerce\Resource\\') !== false) {
+            return true;
+        }
+
+        return parent::has($name);
+    }
 }
