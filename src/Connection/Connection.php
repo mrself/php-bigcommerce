@@ -89,8 +89,9 @@ class Connection extends \Bigcommerce\Api\Connection
 
     /**
      * Initializes the connection object.
+     * @param int $timeout
      */
-    public function __construct()
+    public function __construct(int $timeout = 60)
     {
         if (!defined('STDIN')) {
             define('STDIN', fopen('php://stdin', 'r'));
@@ -108,7 +109,7 @@ class Connection extends \Bigcommerce\Api\Connection
             $this->followLocation = true;
         }
 
-        $this->setTimeout(60);
+        $this->setTimeout($timeout);
     }
 
     /**
