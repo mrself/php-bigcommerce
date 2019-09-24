@@ -23,6 +23,12 @@ class ConnectionProvider
      */
     protected $env = 'dev';
 
+    /**
+     * @Option()
+     * @var int
+     */
+    private $timeout;
+
     public function setConnection($connection)
     {
         $this->connection = $connection;
@@ -52,7 +58,7 @@ class ConnectionProvider
             'auth_token' => $apiToken,
             'store_hash' => $storeHash
         ]);
-        $connection = $this->connection ?: new Connection();
+        $connection = $this->connection ?: new Connection($this->timeout);
         $connection->authenticateOauth($clientId, $apiToken);
         Bigcommerce::setConnection($connection);
         Bigcommerce::failOnError(true);
