@@ -16,7 +16,7 @@
     "ext-json": "*",
     "symfony/framework-bundle": "^4.2.2",
     "bigcommerce/api": "^3.2",
-    "icanboogie/inflector": "^1.4",
+    "icanboogie/inflector": "^2.0",
     "mrself/namespace": "^1.1.0",
     "psr/log": "^1.1",
     "monolog/monolog": "^1.24",
